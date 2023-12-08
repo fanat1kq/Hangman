@@ -5,10 +5,19 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class Main {
-   static int number=1;
+   static int number=1; //меньшая область видимости
     public static void main(String[] args) throws IOException {
             while (true) {
-                loopGame();
+                System.out.println("Начать игру?:");
+                Scanner scanner = new Scanner(System.in);
+                String input = scanner.nextLine().toLowerCase();
+                if (input.equals("да")) loopGame();
+                else if (input.equals("нет")){
+                    scanner.close();
+
+                    System.exit(0);
+                }
+                else System.out.println("попробуйте еще раз");
             }
         }
         public static void loopGame() throws IOException {
@@ -48,13 +57,15 @@ public class Main {
             Scanner sc = new Scanner(System.in);
             String letter = sc.nextLine().toLowerCase();
             if (checkLetter(letter,word,new_word).equals(new_word) ) printHangMan();
-                else if (new_word.contains(letter)) System.out.println("Вы уже вводили "+ letter+ ". Попробуйте другую букву");
-                else if (!checkRussianLetter(letter.charAt(0))) System.out.println("только русские буквы!");
+            if (new_word.contains(letter)) System.out.println("Вы уже вводили "+ letter+ ". Попробуйте другую букву");
+            if (!checkRussianLetter(letter.charAt(0))) System.out.println("только русские буквы!");
             new_word =checkLetter(letter,word,new_word);
             if (checkLetter(letter,word,new_word).equals(new_word) ) printHangMan();
             System.out.println(checkLetter(letter,word,new_word));
 
-                if (!new_word.contains("*")) System.out.println("Победа");
+                if (!new_word.contains("*")) {System.out.println("Победа");//поменять на счетчик количества слов
+
+                };
 
         }//отгаданное слово
         while (true);
