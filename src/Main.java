@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Main {
    static int number=1;
@@ -21,13 +22,6 @@ public class Main {
 
         game(word, str);
 
-//        Scanner sc = new Scanner(System.in);
-//        System.out.println("New or Exit");
-//        String phrase1 = sc.nextLine();
-//        System.out.println(phrase1);
-//        if (phrase1=="N") startGameLoop();
-//                else if (phrase1=="E") sc.close();
-//                    else System.out.println("попробуйте еще раз");
 
     }
 
@@ -48,17 +42,19 @@ public class Main {
     }
 
     public static void game(String word, String new_word) throws IOException {
-        do{System.out.println("введите букву");
-         Scanner sc = new Scanner(System.in);
-            String charac = sc.nextLine().toLowerCase();// если ввел заглавную
-            if (new_word.contains(charac)) System.out.println("Вы уже вводили "+ charac+ ". Попробуйте другую букву");
+        do{
 
-            if (checkCharacter(charac,word,new_word).equals(new_word)) HangMan();///перепроверить
-            new_word =checkCharacter(charac,word,new_word);
+            System.out.println("введите букву");
+            Scanner sc = new Scanner(System.in);
+            String letter = sc.nextLine().toLowerCase();
+            if (checkLetter(letter,word,new_word).equals(new_word) ) printHangMan();
+                else if (new_word.contains(letter)) System.out.println("Вы уже вводили "+ letter+ ". Попробуйте другую букву");
+                else if (!checkRussianLetter(letter.charAt(0))) System.out.println("только русские буквы!");
+            new_word =checkLetter(letter,word,new_word);
+            if (checkLetter(letter,word,new_word).equals(new_word) ) printHangMan();
+            System.out.println(checkLetter(letter,word,new_word));
 
-            System.out.println(checkCharacter(charac,word,new_word));
-
-            if (!new_word.contains("*")) System.out.println("Победа");
+                if (!new_word.contains("*")) System.out.println("Победа");
 
         }//отгаданное слово
         while (true);
@@ -66,12 +62,9 @@ public class Main {
             }
 
 
-    public static void HangMan(){
-
-
+    public static void printHangMan(){
         number++;
         switch (number) {
-
 
             case 2:
                 System.out.println("  ______");
@@ -80,6 +73,7 @@ public class Main {
                 System.out.println("  |     ");
                 System.out.println("  |     ");
                 System.out.println("__|_______");
+                System.out.println("Осталось 6 попыток");
                 break;
             case 4:
                 System.out.println("  ______");
@@ -88,6 +82,7 @@ public class Main {
                 System.out.println("  |     ");
                 System.out.println("  |     ");
                 System.out.println("__|_______");
+                System.out.println("Осталось 5 попыток");
                 break;
             case 6:
                 System.out.println("  ______");
@@ -96,6 +91,7 @@ public class Main {
                 System.out.println("  |    |");
                 System.out.println("  |    ");
                 System.out.println("__|_______");
+                System.out.println("Осталось 4 попытки");
                 break;
             case 8:
                 System.out.println("  ______");
@@ -104,6 +100,7 @@ public class Main {
                 System.out.println("  |   /| ");
                 System.out.println("  |     ");
                 System.out.println("__|_______");
+                System.out.println("Осталось 3 попытки");
                 break;
             case 10:
                 System.out.println("  ______");
@@ -112,6 +109,7 @@ public class Main {
                 System.out.println("  |   /|\\");
                 System.out.println("  |    ");
                 System.out.println("__|_______");
+                System.out.println("Осталось 2 попытки");
                 break;
             case 12:
                 System.out.println("  ______");
@@ -120,6 +118,7 @@ public class Main {
                 System.out.println("  |   /|\\");
                 System.out.println("  |   / ");
                 System.out.println("__|_______");
+                System.out.println("Осталось 1 попытка");
                 break;
             case 14:
                 System.out.println("  ______");
@@ -137,7 +136,7 @@ public class Main {
         }
     }
 
-    public static String checkCharacter(String character, String word, String str) throws IOException {//отгадывание буквы
+    public static String checkLetter(String character, String word, String str)  {//отгадывание буквы
         char[] charStr=str.toCharArray();
         for (int i = 0; i < str.length(); i++) {
             if (word.charAt(i) == character.charAt(0)) {//замена отгаданной буквы
@@ -150,4 +149,11 @@ public class Main {
 
         return String.valueOf(charStr);
     }
+
+    public static boolean checkRussianLetter(char userInput) {
+        String regex = "[а-яА-ЯёЁ]";
+        return Pattern.matches(regex, String.valueOf(userInput));
+    }
+
+
     }
