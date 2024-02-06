@@ -5,10 +5,11 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class Main {
-   static int number=1; //меньшая область видимости
+   static int number=1;
+     static Set<String> usedLetters= new HashSet<String>();
     public static void main(String[] args) throws IOException {
             while (true) {
-                System.out.println("Начать игру?:");
+                System.out.println("Начать игру?(да/нет):");
                 Scanner scanner = new Scanner(System.in);
                 String input = scanner.nextLine().toLowerCase();
                 if (input.equals("да")) loopGame();
@@ -21,21 +22,16 @@ public class Main {
             }
         }
         public static void loopGame() throws IOException {
-
         System.out.println("Начало нового раунда:");
         String word =createWord().toLowerCase();
-
         String str = "*".repeat(word.length());
         System.out.println(word);
         System.out.println(str);
-
         game(word, str);
-
-
     }
 
     public static String createWord() throws IOException {
-            BufferedReader reader = new BufferedReader(new FileReader("src/dictionary.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("dictionary.txt"));
             String line = reader.readLine();
             List<String> words = new ArrayList<String>();
             while(line != null) {
@@ -50,24 +46,24 @@ public class Main {
             return randomWord;
     }
 
-    public static void game(String word, String new_word) throws IOException {
+    public static void game(String word, String newWord) {
         do{
-
             System.out.println("введите букву");
             Scanner sc = new Scanner(System.in);
             String letter = sc.nextLine().toLowerCase();
-            if (checkLetter(letter,word,new_word).equals(new_word) ) printHangMan();
-            if (new_word.contains(letter)) System.out.println("Вы уже вводили "+ letter+ ". Попробуйте другую букву");
-            if (!checkRussianLetter(letter.charAt(0))) System.out.println("только русские буквы!");
-            new_word =checkLetter(letter,word,new_word);
-            if (checkLetter(letter,word,new_word).equals(new_word) ) printHangMan();
-            System.out.println(checkLetter(letter,word,new_word));
+            if (checkLetter(letter,word,newWord).equals(newWord) ) printHangMan();
 
-                if (!new_word.contains("*")) {System.out.println("Победа");//поменять на счетчик количества слов
+            if (!usedLetters.contains(letter)) {usedLetters.add(letter);}
+            else System.out.println("Вы уже вводили " + letter + ". Попробуйте другую букву");
+            if (!checkRussianLetter(letter.charAt(0))) System.out.println("только русские буквы!");
+            newWord =checkLetter(letter,word,newWord);
+            if (checkLetter(letter,word,newWord).equals(newWord) ) printHangMan();
+            System.out.println(checkLetter(letter,word,newWord));
+                if (!newWord.contains("*")) {System.out.println("Победа");
 
                 };
 
-        }//отгаданное слово
+        }
         while (true);
 
             }
@@ -147,17 +143,13 @@ public class Main {
         }
     }
 
-    public static String checkLetter(String character, String word, String str)  {//отгадывание буквы
+    public static String checkLetter(String character, String word, String str)  {
         char[] charStr=str.toCharArray();
         for (int i = 0; i < str.length(); i++) {
-            if (word.charAt(i) == character.charAt(0)) {//замена отгаданной буквы
+            if (word.charAt(i) == character.charAt(0)) {
                 charStr[i] = character.charAt(0);
             }
         }
-
-//        if (String.valueOf(charStr).equals(str)) HangMan();
-//        else System.out.println("Угадали");
-
         return String.valueOf(charStr);
     }
 
@@ -165,6 +157,4 @@ public class Main {
         String regex = "[а-яА-ЯёЁ]";
         return Pattern.matches(regex, String.valueOf(userInput));
     }
-
-
     }
