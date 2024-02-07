@@ -1,4 +1,4 @@
-# Handman
+# Hangman
 Виселица (также известна как «Балда»)
 
 реализация на Java, описание задания https://zhukovsd.github.io/java-backend-learning-course/Projects/Hangman/
